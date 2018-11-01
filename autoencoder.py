@@ -2,6 +2,12 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
+'''
+batch_size 64?
+epoch every 100 checkpoint
+learning_rate 0.001?
+'''
+
 
 class Bottleneck(nn.Module):
     expansion = 4
@@ -103,13 +109,13 @@ class ResNet_autoencoder(nn.Module):
         self.relu = nn.ReLU()
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
-        self.dlayer1 = self._make_downlayer(downblock, 64, num_layers[0])
-        self.dlayer2 = self._make_downlayer(downblock, 128, num_layers[1],
-                                            stride=2)
-        self.dlayer3 = self._make_downlayer(downblock, 256, num_layers[2],
-                                            stride=2)
-        self.dlayer4 = self._make_downlayer(downblock, 512, num_layers[3],
-                                            stride=2)
+        self.layer1 = self._make_downlayer(downblock, 64, num_layers[0])
+        self.layer2 = self._make_downlayer(downblock, 128, num_layers[1],
+                                           stride=2)
+        self.layer3 = self._make_downlayer(downblock, 256, num_layers[2],
+                                           stride=2)
+        self.layer4 = self._make_downlayer(downblock, 512, num_layers[3],
+                                           stride=2)
 
         self.uplayer1 = self._make_up_block(
             upblock, 512,  num_layers[3], stride=2)
@@ -179,7 +185,7 @@ class ResNet_autoencoder(nn.Module):
         x = self.dlayer2(x)
         x = self.dlayer3(x)
         x = self.dlayer4(x)
-
+        tmp1 = x
         x = self.uplayer1(x)
         x = self.uplayer2(x)
         x = self.uplayer3(x)
@@ -188,7 +194,19 @@ class ResNet_autoencoder(nn.Module):
 
         x = self.conv1_1(x, output_size=img.size())
 
-        return x
+        tmp2 = x
+
+        x = self.conv1(tmp2)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.maxpool(x)
+
+        x = self.dlayer1(x)
+        x = self.dlayer2(x)
+        x = self.dlayer3(x)
+        x = self.dlayer4(x)
+
+        return x, tmp1, tmp2
 
 
 def ResNet50(**kwargs):
@@ -201,6 +219,17 @@ def ResNet101(**kwargs):
 
 model = ResNet_autoencoder(Bottleneck, DeconvBottleneck, [
                            3, 4, 6, 3], 3).cuda()
+'''
+load pre_trained_model
+'''
+pretrained_dict = torch.load("G:\\resnet50-19c8e357.pth")
+model_dict = model.state_dict()
+# 1. filter out unnecessary keys
+pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+# 2. overwrite entries in the existing state dict
+model_dict.update(pretrained_dict)
+model.load_state_dict(model_dict)
+
 input = torch.autograd.Variable(torch.randn(2, 3, 224, 224)).cuda()
 o = model(input)
 print(o)

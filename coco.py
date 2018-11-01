@@ -1,12 +1,30 @@
-import torchvision.datasets as dset
-import torchvision.transforms as transforms
-cap = dset.CocoCaptions(root='dir where images are',
-                        annFile='json annotation file',
-                        transform=transforms.ToTensor())
+import torchvision.datasets
+import torchvision.transforms
+import torch
 
 
-print('Number of samples: ', len(cap))
-img, target = cap[3]  # load 4th sample
+def load_dataset():
+    data_path = 'G:\\example'
+    transform = torchvision.transforms.Compose([
+        torchvision.transforms.Resize((224, 224)),
+        torchvision.transforms.ToTensor()
+    ])
+    train_dataset = torchvision.datasets.ImageFolder(
+        root=data_path,
+        transform=transform
+    )
+    train_loader = torch.utils.data.DataLoader(
+        train_dataset,
+        batch_size=2,
+        num_workers=0,
+        shuffle=False
+    )
+    return train_loader
 
-print("Image Size: ", img.size())
-print(target)
+
+'''
+need to resize
+'''
+dataloader = load_dataset()
+for batch_idx, (image, target) in enumerate(dataloader):
+    image = image.cuda()
