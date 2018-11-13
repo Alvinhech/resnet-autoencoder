@@ -174,39 +174,35 @@ class ResNet_autoencoder(nn.Module):
         self.in_channels = init_channels * 2
         return nn.Sequential(*layers)
 
-    def forward(self, x):
-        img = x
+    def encoder(self, x):
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
         x = self.maxpool(x)
 
-        x = self.dlayer1(x)
-        x = self.dlayer2(x)
-        x = self.dlayer3(x)
-        x = self.dlayer4(x)
-        tmp1 = x
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = self.layer3(x)
+        x = self.layer4(x)
+        return x
+
+    def decoder(self, x, image_size):
         x = self.uplayer1(x)
         x = self.uplayer2(x)
         x = self.uplayer3(x)
         x = self.uplayer4(x)
         x = self.uplayer_top(x)
 
-        x = self.conv1_1(x, output_size=img.size())
+        x = self.conv1_1(x, output_size=image_size)
+        return x
 
-        tmp2 = x
+    def forward(self, x):
+        img = x
+        tmp1 = self.encoder(x)
+        tmp2 = self.decoder(tmp1, img.size())
+        tmp3 = self.encoder(tmp2)
 
-        x = self.conv1(tmp2)
-        x = self.bn1(x)
-        x = self.relu(x)
-        x = self.maxpool(x)
-
-        x = self.dlayer1(x)
-        x = self.dlayer2(x)
-        x = self.dlayer3(x)
-        x = self.dlayer4(x)
-
-        return x, tmp1, tmp2
+        return tmp1, tmp2, tmp3
 
 
 def ResNet50(**kwargs):
