@@ -3,8 +3,8 @@ import torchvision.transforms
 import torch
 
 
-def load_dataset():
-    data_path = 'G:\\example'
+def load_dataset(path):
+    data_path = path
     transform = torchvision.transforms.Compose([
         torchvision.transforms.Resize((224, 224)),
         torchvision.transforms.ToTensor()
@@ -15,7 +15,7 @@ def load_dataset():
     )
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
-        batch_size=2,
+        batch_size=64,
         num_workers=0,
         shuffle=False
     )
@@ -25,6 +25,8 @@ def load_dataset():
 '''
 need to resize
 '''
-dataloader = load_dataset()
-for batch_idx, (image, target) in enumerate(dataloader):
-    image = image.cuda()
+
+if __name__ == "__main__":
+    dataloader = load_dataset("")
+    for batch_idx, (image, target) in enumerate(dataloader):
+        image = image.cuda()

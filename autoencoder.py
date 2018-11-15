@@ -213,19 +213,21 @@ def ResNet101(**kwargs):
     return ResNet_autoencoder(Bottleneck, [3, 4, 23, 2], 3, **kwargs)
 
 
-model = ResNet_autoencoder(Bottleneck, DeconvBottleneck, [
-                           3, 4, 6, 3], 3).cuda()
-'''
-load pre_trained_model
-'''
-pretrained_dict = torch.load("G:\\resnet50-19c8e357.pth")
-model_dict = model.state_dict()
-# 1. filter out unnecessary keys
-pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
-# 2. overwrite entries in the existing state dict
-model_dict.update(pretrained_dict)
-model.load_state_dict(model_dict)
+if __name__ == "__main__":
+    model = ResNet_autoencoder(Bottleneck, DeconvBottleneck, [
+        3, 4, 6, 3], 3).cuda()
+    '''
+    load pre_trained_model
+    '''
+    pretrained_dict = torch.load("G:\\resnet50-19c8e357.pth")
+    model_dict = model.state_dict()
+    # 1. filter out unnecessary keys
+    pretrained_dict = {k: v for k,
+                       v in pretrained_dict.items() if k in model_dict}
+    # 2. overwrite entries in the existing state dict
+    model_dict.update(pretrained_dict)
+    model.load_state_dict(model_dict)
 
-input = torch.autograd.Variable(torch.randn(2, 3, 224, 224)).cuda()
-o = model(input)
-print(o)
+    input = torch.autograd.Variable(torch.randn(2, 3, 224, 224)).cuda()
+    o = model(input)
+    print(o)
