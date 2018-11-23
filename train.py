@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from autoencoder import ResNet_autoencoder, Bottleneck, DeconvBottleneck
+from autoencoder1 import ResNet_autoencoder, Bottleneck, DeconvBottleneck
 from coco import load_dataset
 
 if __name__ == "__main__":

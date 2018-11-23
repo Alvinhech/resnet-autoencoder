@@ -3,9 +3,9 @@ from torch import nn
 import torch.nn.functional as F
 
 '''
-batch_size 64?
+batch_size 8
 epoch every 100 checkpoint
-learning_rate 0.001?
+learning_rate 1e-4?
 '''
 
 

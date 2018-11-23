@@ -102,8 +102,8 @@ class ResNet(nn.Module):
 
         return x
 
-
-Encoder1 = ResNet(Bottleneck, [3, 4, 6, 3]).cuda()
-input = torch.autograd.Variable(torch.randn(20, 3, 224, 224)).cuda()
-o = Encoder1(input)
-print(o)
+if __name__ == "__main__":
+    Encoder1 = ResNet(Bottleneck, [3, 4, 6, 3]).cuda()
+    input = torch.autograd.Variable(torch.randn(20, 3, 224, 224)).cuda()
+    o = Encoder1(input)
+    print(o)
