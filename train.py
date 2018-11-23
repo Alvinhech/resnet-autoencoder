@@ -34,7 +34,7 @@ if __name__ == "__main__":
     # Loss and Optimizer
     criterion = nn.MSELoss()
 
-    optimizer = torch.optim.Adam(params, lr=0.001)
+    optimizer = torch.optim.Adam(params, lr=1e-4)
 
     model.train()
     for batch_idx, (image, target) in enumerate(dataloader):
