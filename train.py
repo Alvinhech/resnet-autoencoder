@@ -3,6 +3,7 @@ from torch import nn
 from autoencoder1 import ResNet_autoencoder, Bottleneck, DeconvBottleneck
 from coco import load_dataset
 import matplotlib.pyplot as plt
+from torch.autograd import Variable
 
 EPOCH = 1000
 
@@ -49,7 +50,7 @@ if __name__ == "__main__":
     
     for epoch in range(EPOCH):
         for batch_idx, (image, target) in enumerate(dataloader):
-            image = image.cuda()
+            image = Variable(image.cuda())
 
             # Forward + Backward + Optimize
 
@@ -72,5 +73,4 @@ if __name__ == "__main__":
         plt.show()
         
         if((epoch+1)%100==0):
-            
-            torch.save(model.state_dict(), 'resnet'+str(epoch+1)+'pkl')
+            torch.save(resnet.state_dict(), './save/resnet'+str(epoch+1)+'pkl')
