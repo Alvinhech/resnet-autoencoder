@@ -215,7 +215,7 @@ if __name__ == "__main__":
     '''
     load pre_trained_model
     '''
-    pretrained_dict = torch.load("G:\\resnet50-19c8e357.pth")
+    pretrained_dict = torch.load("./resnet50-19c8e357.pth")
     model_dict = model.state_dict()
     # 1. filter out unnecessary keys
     pretrained_dict = {k: v for k,
