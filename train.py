@@ -2,6 +2,7 @@ import torch
 from torch import nn
 from autoencoder1 import ResNet_autoencoder, Bottleneck, DeconvBottleneck
 from coco import load_dataset
+import matplotlib.pyplot as plt
 
 EPOCH = 1000
 
@@ -11,11 +12,13 @@ if __name__ == "__main__":
 
     # load data
     dataloader = load_dataset('/home/achhe_ucdavis_edu/train2017')
-
+    print("load data success.")
     '''
     load pre_trained_model
     '''
     pretrained_dict = torch.load('./resnet50-19c8e357.pth')
+    print("load pretrained model success")
+
     model_dict = model.state_dict()
     # 1. filter out unnecessary keys
     pretrained_dict = {k: v for k,
@@ -40,6 +43,10 @@ if __name__ == "__main__":
 
     model.train()
 
+    loss_list=[]
+
+    print("start training.")
+    
     for epoch in range(EPOCH):
         for batch_idx, (image, target) in enumerate(dataloader):
             image = image.cuda()
@@ -58,6 +65,12 @@ if __name__ == "__main__":
 
             if (batch_idx+1) % 2 == 0:
                 print ("Epoch [%d/%d], Iter [%d/%d] Loss: %.4f" % (epoch+1, EPOCH, batch_idx+1, loss.data[0]))
+
+        loss_list.append(loss)
+        plt.plot(loss_list)
+        plt.ylable('loss')
+        plt.show()
         
         if((epoch+1)%100==0):
-            torch.save(resnet.state_dict(), 'resnet'+str(epoch+1)+'pkl')
+            
+            torch.save(model.state_dict(), 'resnet'+str(epoch+1)+'pkl')
