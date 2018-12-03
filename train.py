@@ -10,12 +10,12 @@ if __name__ == "__main__":
         3, 4, 6, 3], 3).cuda()
 
     # load data
-    dataloader = load_dataset('G:\\example')
+    dataloader = load_dataset('/home/achhe_ucdavis_edu/train2017')
 
     '''
     load pre_trained_model
     '''
-    pretrained_dict = torch.load("G:\\resnet50-19c8e357.pth")
+    pretrained_dict = torch.load('./resnet50-19c8e357.pth')
     model_dict = model.state_dict()
     # 1. filter out unnecessary keys
     pretrained_dict = {k: v for k,
