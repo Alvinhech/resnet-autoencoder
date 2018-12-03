@@ -58,14 +58,16 @@ if __name__ == "__main__":
 
             tmp1, tmp2, tmp3 = model(image)
 
-            loss = criterion(image, tmp2) + criterion(tmp1, tmp3)
+            loss1 = criterion(tmp2,image.detach())
+            loss2 = criterion(tmp3,tmp1.detach())
+            loss = loss1 + loss2
 
             loss.backward()
 
             optimizer.step()
 
             if (batch_idx+1) % 2 == 0:
-                print ("Epoch [%d/%d], Iter [%d/%d] Loss: %.4f" % (epoch+1, EPOCH, batch_idx+1, loss.data[0]))
+                print ("Epoch [%d/%d], Iter [%d] Loss: %.4f" % (epoch+1, EPOCH, batch_idx+1, loss.data[0]))
 
         loss_list.append(loss)
         plt.plot(loss_list)
