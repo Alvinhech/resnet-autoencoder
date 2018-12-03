@@ -27,6 +27,6 @@ need to resize
 '''
 
 if __name__ == "__main__":
-    dataloader = load_dataset("")
+    dataloader = load_dataset("/home/achhe_ucdavis_edu/resnet-autoencoder")
     for batch_idx, (image, target) in enumerate(dataloader):
         image = image.cuda()
