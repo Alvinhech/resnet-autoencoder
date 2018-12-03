@@ -3,6 +3,8 @@ from torch import nn
 from autoencoder1 import ResNet_autoencoder, Bottleneck, DeconvBottleneck
 from coco import load_dataset
 
+EPOCH = 1000
+
 if __name__ == "__main__":
     model = ResNet_autoencoder(Bottleneck, DeconvBottleneck, [
         3, 4, 6, 3], 3).cuda()
@@ -37,17 +39,25 @@ if __name__ == "__main__":
     optimizer = torch.optim.Adam(params, lr=1e-4)
 
     model.train()
-    for batch_idx, (image, target) in enumerate(dataloader):
-        image = image.cuda()
 
-        # Forward + Backward + Optimize
+    for epoch in range(EPOCH):
+        for batch_idx, (image, target) in enumerate(dataloader):
+            image = image.cuda()
 
-        optimizer.zero_grad()
+            # Forward + Backward + Optimize
 
-        tmp1, tmp2, tmp3 = model(image)
+            optimizer.zero_grad()
 
-        loss = criterion(image, tmp2) + criterion(tmp1, tmp3)
+            tmp1, tmp2, tmp3 = model(image)
 
-        loss.backward()
+            loss = criterion(image, tmp2) + criterion(tmp1, tmp3)
 
-        optimizer.step()
+            loss.backward()
+
+            optimizer.step()
+
+            if (batch_idx+1) % 2 == 0:
+                print ("Epoch [%d/%d], Iter [%d/%d] Loss: %.4f" % (epoch+1, EPOCH, batch_idx+1, loss.data[0]))
+        
+        if((epoch+1)%100==0):
+            torch.save(resnet.state_dict(), 'resnet'+str(epoch+1)+'pkl')
