@@ -12,7 +12,7 @@ if __name__ == "__main__":
         3, 4, 6, 3], 3).cuda()
 
     # load data
-    dataloader = load_dataset('/home/achhe_ucdavis_edu/train2017')
+    dataloader = load_dataset('/home/achhe_ucdavis_edu/resnet-autoencoder/data')
     print("load data success.")
     '''
     load pre_trained_model
