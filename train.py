@@ -12,6 +12,7 @@ if __name__ == "__main__":
         3, 4, 6, 3], 3).cuda()
 
     # load data
+    print("start loading.")
     dataloader = load_dataset('/home/achhe_ucdavis_edu/resnet-autoencoder/data')
     print("load data success.")
     '''
