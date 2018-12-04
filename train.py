@@ -5,7 +5,7 @@ from coco import load_dataset
 import matplotlib.pyplot as plt
 from torch.autograd import Variable
 
-EPOCH = 100
+EPOCH = 10
 
 if __name__ == "__main__":
     model = ResNet_autoencoder(Bottleneck, DeconvBottleneck, [
@@ -69,12 +69,12 @@ if __name__ == "__main__":
 
             if (batch_idx+1) % 10 == 0:
                 print ("Epoch [%d/%d], Iter [%d] Loss: %.4f" % (epoch+1, EPOCH, batch_idx+1, loss.data[0]))
-        '''
-        loss_list.append(loss)
+            '''
+            loss_list.append(loss)
         
-        plt.plot(loss_list)
-        plt.ylable('loss')
-        plt.show()
-        '''
-        if((epoch+1)%1==0):
-            torch.save(resnet.state_dict(), './save/resnet'+str(epoch+1)+'pkl')
+            plt.plot(loss_list)
+            plt.ylable('loss')
+            plt.show()
+            '''
+            if((batch_idx+1)%1000==0):
+                torch.save(model.state_dict(), './save/resnet'+str(epoch+1)+'_'+str(batch_idx+1)+'.pkl')
