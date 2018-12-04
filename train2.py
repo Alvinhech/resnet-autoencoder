@@ -77,4 +77,4 @@ if __name__ == "__main__":
             plt.show()
             '''
             if((batch_idx+1)%1000==0):
-                torch.save(model.state_dict(), './save/resnet'+str(epoch+1)+'_'+str(batch_idx+1)+'.pkl')
+                torch.save(model.state_dict(), './save2/resnet'+str(epoch+1)+'_'+str(batch_idx+1)+'.pkl')
