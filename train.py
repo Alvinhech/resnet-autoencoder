@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
             optimizer.step()
 
-            if (batch_idx+1) % 2 == 0:
+            if (batch_idx+1) % 10 == 0:
                 print ("Epoch [%d/%d], Iter [%d] Loss: %.4f" % (epoch+1, EPOCH, batch_idx+1, loss.data[0]))
 
         loss_list.append(loss)
