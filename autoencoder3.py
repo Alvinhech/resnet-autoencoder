@@ -185,8 +185,8 @@ class ResNet_autoencoder(nn.Module):
         return x
 
     def decoder(self, x, image_size):
-        x = self.uplayer1(x)
-        x = self.uplayer2(x)
+        x = self.uplayer3(x)
+        x = self.uplayer4(x)
         x = self.uplayer_top(x)
 
         x = self.conv1_1(x, output_size=image_size)
