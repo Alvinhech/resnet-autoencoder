@@ -112,10 +112,10 @@ if __name__ == "__main__":
         c, s = model.encoder(cImg), model.encoder(sImg)
         c = c.data.cpu().squeeze(0)
         s = s.data.cpu().squeeze(0)
-
-        o = wct(c, s, 1)
+        alpha = 1.0
+        o = wct(c, s, alpha)
         o = Variable(o.cuda(), volatile=True)
         out = model.decoder(o, cImg.size())
         out = out.data.cpu().squeeze(0)
         output = F.to_pil_image(out)
-        output.save("./output/" + imname)
+        output.save("./output/" + str(alpha) + "/" + imname)
