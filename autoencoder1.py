@@ -200,9 +200,8 @@ class ResNet_autoencoder(nn.Module):
         img = x
         tmp1 = self.encoder(x)
         tmp2 = self.decoder(tmp1, img.size())
-        tmp3 = self.encoder(tmp2)
 
-        return tmp1, tmp2, tmp3
+        return tmp1, tmp2
 
 
 def ResNet50(**kwargs):

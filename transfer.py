@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 import torchvision.transforms as transforms
-from autoencoder1 import ResNet_autoencoder, Bottleneck, DeconvBottleneck
+from autoencoder4 import ResNet_autoencoder, Bottleneck, DeconvBottleneck
 from coco import load_dataset
 import matplotlib.pyplot as plt
 from torch.autograd import Variable
@@ -81,7 +81,7 @@ def wct(c, s, alpha):
     return transformed.float().unsqueeze(0)
 
 
-PATH = "./save/resnet3_5000.pkl"
+PATH = "./save4/resnet3_2000.pkl"
 
 
 def default_loader(path):
@@ -100,22 +100,22 @@ if __name__ == "__main__":
     loader = torch.utils.data.DataLoader(dataset=dataset,
                                          batch_size=1,
                                          shuffle=False)
+    alpha_list = [0.4, 0.6, 0.7, 0.8, 1.0]
+    for alpha in alpha_list:
+        for i, (contentImg, styleImg, imname) in enumerate(loader):
+            imname = imname[0]
+            print('Transferring ' + imname)
+            contentImg = contentImg.cuda()
+            styleImg = styleImg.cuda()
+            cImg = Variable(contentImg, volatile=True)
+            sImg = Variable(styleImg, volatile=True)
 
-    for i, (contentImg, styleImg, imname) in enumerate(loader):
-        imname = imname[0]
-        print('Transferring ' + imname)
-        contentImg = contentImg.cuda()
-        styleImg = styleImg.cuda()
-        cImg = Variable(contentImg, volatile=True)
-        sImg = Variable(styleImg, volatile=True)
-
-        c, s = model.encoder(cImg), model.encoder(sImg)
-        c = c.data.cpu().squeeze(0)
-        s = s.data.cpu().squeeze(0)
-        alpha = 1.0
-        o = wct(c, s, alpha)
-        o = Variable(o.cuda(), volatile=True)
-        out = model.decoder(o, cImg.size())
-        out = out.data.cpu().squeeze(0)
-        output = F.to_pil_image(out)
-        output.save("./output/" + str(alpha) + "/" + imname)
+            c, s = model.encoder(cImg), model.encoder(sImg)
+            c = c.data.cpu().squeeze(0)
+            s = s.data.cpu().squeeze(0)
+            o = wct(c, s, alpha)
+            o = Variable(o.cuda(), volatile=True)
+            out = model.decoder(o, cImg.size())
+            out = out.data.cpu().squeeze(0)
+            output = F.to_pil_image(out)
+            output.save("./output4/" + str(alpha) + "/" + imname)

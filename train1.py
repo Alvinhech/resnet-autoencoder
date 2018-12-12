@@ -57,11 +57,9 @@ if __name__ == "__main__":
 
             optimizer.zero_grad()
 
-            tmp1, tmp2, tmp3 = model(image)
+            tmp1, tmp2= model(image)
 
-            loss1 = criterion(tmp2,image.detach())
-            loss2 = criterion(tmp3,tmp1.detach())
-            loss = loss1 + loss2
+            loss = criterion(tmp2,image.detach())
 
             loss.backward()
 
@@ -77,4 +75,4 @@ if __name__ == "__main__":
             plt.show()
             '''
             if((batch_idx+1)%1000==0):
-                torch.save(model.state_dict(), './save/resnet'+str(epoch+1)+'_'+str(batch_idx+1)+'.pkl')
+                torch.save(model.state_dict(), './save5/resnet'+str(epoch+1)+'_'+str(batch_idx+1)+'.pkl')
