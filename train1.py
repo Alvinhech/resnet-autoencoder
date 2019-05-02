@@ -7,7 +7,6 @@ from torch.autograd import Variable
 
 EPOCH = 10
 
-
 if __name__ == "__main__":
     model = ResNet_autoencoder(Bottleneck, DeconvBottleneck, [
         3, 4, 6, 3], 3).cuda()
